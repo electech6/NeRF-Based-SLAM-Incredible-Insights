@@ -1,0 +1,676 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>*vMAP: Vectorised Object Mapping for Neural Field SLAM</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-interactiveBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-translucentGray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="1981b733-3f75-4479-812b-0a51639e0265" class="page sans"><header><h1 class="page-title">*vMAP: Vectorised Object Mapping for Neural Field SLAM</h1><p class="page-description"></p></header><div class="page-body"><figure id="da2e792c-8901-44a4-9904-25c0c39ae1c7" class="image"><a href="vMAP%20Vectorised%20Object%20Mapping%20for%20Neural%20Field%20SL%201981b7333f754479812b0a51639e0265/Untitled.png"><img style="width:862px" src="vMAP%20Vectorised%20Object%20Mapping%20for%20Neural%20Field%20SL%201981b7333f754479812b0a51639e0265/Untitled.png"/></a></figure><h1 id="33022cd7-10c6-40ee-a58a-428bb25ca0c1" class="">Abstract</h1><p id="589f41e1-9cf6-44ac-86c3-8ec411c8a04d" class="">我们提出了vMAP，一个<mark class="highlight-yellow">使用神经场表示的对象级密集SLAM系统</mark>。<mark class="highlight-orange">每个对象都由一个小MLP表示</mark>，无需3D先验即可实现高效，水密的对象建模。当<mark class="highlight-orange">RGB-D相机</mark>在没有先验信息的情况下浏览场景时，vMAP实时检测对象实例，并动态地将它们添加到其地图中。具体来说，由于矢量化训练的力量，vMAP可以<mark class="highlight-orange">在单个场景中优化多达50个单独的对象</mark>，具有5Hz地图更新的极其高效的训练速度。我们通过实验证明，与之前的神经场SLAM系统相比，场景级和对象级的重建质量显著提高。项目页面:<a href="https://github.com/kxhit/vMAP">https://github.com/kxhit/vMAP</a></p><h1 id="e0efcdde-f280-41ae-a508-913748c32c4b" class="">Introduction</h1><p id="3380c905-0f67-4afe-870f-d38eb34a09cb" class="">对于机器人和其他交互式视觉应用，对象级模型可以说是语义上最优的，它以分离的、可组合的方式表示场景实体，但也有效地将资源集中在重要的东西上一个。</p><p id="b5623c7d-9f8e-44b2-be7c-59bcf43bc183" class="">构建一个对象级别的映射系统的关键问题在于需要了解关于这些对象的哪些级别的先验信息去分割、分类和重新构造场景中的对象。如果没有三维物体先验，那么通常只能重建物体直接观察到的部分，从而导致孔洞和缺失部分[5,47]。先前的对象信息，如CAD模型或类别级形状空间模型，可以从部分视图中估计完整的对象形状，但仅适用于这些模型可用的场景中的对象子集。</p><p id="955c95bc-208a-4cc4-8314-950a712effcf" class="">在本文中，我们提出了一种新的方法，该方法适用于没有3D先验的情况下，但仍然可以在真实的实时场景扫描中实现水密物体重建。我们的系统vMAP基于神经场所显示的吸引属性作为实时场景表示[32]，具有有效和完整的形状表示，但现在重建每个对象的单独微小MLP模型。我们工作的关键技术的贡献是表明，在实时操作期间，<mark class="highlight-orange">通过矢量化训练，可以在单个GPU上同时有效地优化大量独立的MLP对象模型。</mark></p><p id="e7f355ae-edd6-4916-8bd6-3f43b84aa96a" class="">我们表明，与在整个场景的单个神经场模型中使用相似数量的权重相比，通过单独建模对象可以实现更准确和完整的场景重建。我们的实时系统在计算和内存方面都非常高效，并且我们表明，在多个独立的对象网络中，可以用每个对象40KB的学习参数映射多达50个对象的场景。</p><p id="b61b717d-b84f-4f1c-a9c0-5e07fefb00d8" class="">我们还展示了我们的解纠缠对象表示的灵活性，可以用新的对象配置重新组合场景。在模拟和现实世界的数据集上进行了广泛的实验，显示了最先进的场景级和对象级重建性能。</p><h1 id="109a7d85-2851-4c41-809a-e2bffbc354ca" class="">vMAP: An Efficient Object Mapping System with Vectorised Training</h1><h2 id="33bd17bc-9144-4b93-9a00-b44b70729fbc" class="">System Overview</h2><p id="52d3e1e9-44a0-45e5-98b6-a9fc3d8931d4" class="">我们首先介绍了使用<mark class="highlight-orange">高效矢量化训练</mark>的<mark class="highlight-orange">对象级映射</mark>的详细设计(第3.2节)，然后解释了我们改进的<mark class="highlight-orange">像素采样</mark>和表面渲染的训练策略(第3.3节)。最后，我们展示了如何重组和渲染这些学习对象模型的新场景(第3.4节)。我们的训练和渲染管道的概述如图2所示。</p><figure id="2b1531f2-65a8-4b4c-920f-0dbb36a0d125" class="image"><a href="vMAP%20Vectorised%20Object%20Mapping%20for%20Neural%20Field%20SL%201981b7333f754479812b0a51639e0265/Untitled%201.png"><img style="width:1120px" src="vMAP%20Vectorised%20Object%20Mapping%20for%20Neural%20Field%20SL%201981b7333f754479812b0a51639e0265/Untitled%201.png"/></a></figure><h2 id="613289a9-bea2-4a0f-8cb9-2bf3e6984be4" class="">Vectorised Object Level Mapping</h2><p id="51e1ab1e-c745-4a11-b8cc-4eb68f3e3ae0" class=""><mark class="highlight-default"><strong>对象初始化和关联</strong></mark>  首先每个帧都与密集标记的<mark class="highlight-orange">对象掩码</mark>相关联。这些对象掩码要么直接在数据集中提供，要么<mark class="highlight-orange">用现成的2D实例分割网络预测</mark>。由于这些预测的对象掩码<mark class="highlight-orange">在不同帧之间没有时间一致性</mark>，因此我们基于两个标准在前一帧和当前实时帧之间<mark class="highlight-orange">执行对象关联</mark>:i)<mark class="highlight-orange">语义一致性</mark>:当前帧中的对象被预测为与前一帧相同的语义类;ii)<mark class="highlight-orange">空间一致性</mark>:当前帧中的对象在空间上接近前一帧中的对象，通过其3D对象边界的平均IoU来测量。当满足这两个条件时，我们假设它们是相同的对象，并使用相同的对象模型表示它们。否则，它们是不同的对象实例，我们进行<mark class="highlight-orange">初始化一个新的对象模型，并将其附加到模型堆栈中</mark>。</p><p id="f16d5353-3906-44f0-9ec3-d702521b27e5" class="">对于一帧中的每个对象，我们估计其3D对象由其3D点云绑定，该点云由其深度图和相机姿态参数化。<mark class="highlight-orange">相机跟踪是由一个现成的跟踪系统提供的</mark>，我们发现与联合优化姿势和几何形状相比，它更准确、更健壮。如果我们在新帧中检测到相同的对象实例，我们将其3D点云从前一帧合并到当前帧，并<mark class="highlight-orange">重新估计其3D对象边界</mark>。因此，这些对象边界将通过更多的观察动态更新和改进。</p><p id="ab5f6dc4-5e64-45e9-b346-bc977a5a8e42" class=""><strong>物体监督</strong>  为了获得最大的训练效率，我们只<mark class="highlight-default">对</mark><mark class="highlight-orange">2D对象边界框内的像素应用对象级监督</mark>。对于物体蒙版内的那些像素，我们鼓励物体亮度场被占用，并通过深度和颜色损失来监督它们。否则，我们鼓励物体的亮度场为空。</p><p id="4c3eddcd-f4a5-48dd-bf73-93a038d22f9d" class=""><mark class="highlight-orange">每个对象实例从它自己独立的关键帧缓冲区中采样训练像素。</mark>因此，我们可以灵活地停止或恢复任何物体的训练，物体之间没有训练干扰。</p><p id="85ff2c7e-09bf-41f0-85bc-f563a60f3729" class=""><strong>向量化训练</strong>  对一个包含多个小网络神经场进行向量化训练可以带来高效的训练效果，这在之前的工作中已经有所展示【25】。在vMAP中，所有的物体模型都采用相同的设计，除了用稍微大一点的网络表示的背景物体。因此，我们可以<mark class="highlight-orange">将这些小物体模型堆叠在一起进行向量化训练</mark>，利用PyTorch中高度优化的向量化操作【9】。由于多个物体模型是同时批量训练的，而不是顺序训练的，因此我们优化了可用GPU资源的使用。我们表明，向量化训练是系统中必不可少的设计要素，它可以显著提高训练速度，这将在第4.3节中进一步讨论。</p><h2 id="92c8fe2d-ba45-42ea-a30c-f2b18b24d5c6" class="">Neural Implicit Mapping</h2><p id="0b0f7f2b-68d7-466a-94b0-b7f1291c00b0" class=""><strong>深度引导采样</strong> 在RGB数据上训练的神经场不能保证建模精确的物体几何形状，因为它们优化的是外观而不是几何形状。为了获得几何上更精确的物体模型，我们受益于RGB-D传感器提供的深度图，为学习3D体的密度场提供了强大的先验。具体来说，我们<mark class="highlight-orange">沿着每条射线采样Ns和Nc点</mark>，其中Ns点是以表面ts为中心进行的正态分布(来自深度图)采样，具有较小的方差，<mark class="highlight-orange">并且Nc点在相机tn(近界)和表面ts之间均匀采样</mark>，采用分层采样方法。当深度测量无效时，将表面ts替换为远界tf。在数学上，我们有:</p><figure id="b55d740f-f2d1-4a39-9e5c-c7ded543f240" class="image"><a href="vMAP%20Vectorised%20Object%20Mapping%20for%20Neural%20Field%20SL%201981b7333f754479812b0a51639e0265/Untitled%202.png"><img style="width:533px" src="vMAP%20Vectorised%20Object%20Mapping%20for%20Neural%20Field%20SL%201981b7333f754479812b0a51639e0265/Untitled%202.png"/></a></figure><p id="6e74c8fe-289d-4973-802a-a998692cbe25" class="">我们选择 <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>d</mi><mi>σ</mi></msub></mrow><annotation encoding="application/x-tex">d_{\sigma}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.84444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.03588em;">σ</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span> = 3cm，这在我们的实现中效果很好。我们观察到，在表面附近训练更多的点有助于引导物体模型快速专注于表示精确的物体几何形状。</p><p id="f4b85c20-77f8-4cff-89de-a85f0c5fdcb1" class=""><strong>表面和体绘制</strong> 由于我们更关注3D表面重建而不是2D渲染，因此我们忽略了网络输入中的观看方向，并使用二元指标(无透明物体)来建模物体的可见性。与UniSURF[22]的动机相似，我们参数化了一个3D点 <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">x_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span>的占用概率: <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>o</mi><mi>θ</mi></msub><mo>→</mo><mo stretchy="false">[</mo><mn>0</mn><mo separator="true">,</mo><mn>1</mn><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">o_\theta→[0,1]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">o</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">θ</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">1</span><span class="mclose">]</span></span></span></span></span><span>﻿</span></span>，其中 <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>o</mi><mi>θ</mi></msub></mrow><annotation encoding="application/x-tex">o_\theta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">o</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">θ</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span>为连续占用场。因此， <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">x_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span>点沿射线r的终止概率变为    <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>T</mi><mi>i</mi></msub><mo>=</mo><mi>o</mi><mo stretchy="false">(</mo><msub><mi>x</mi><mi>i</mi></msub><mo stretchy="false">)</mo><msub><mi mathvariant="normal">Π</mi><mrow><mi>j</mi><mo>&lt;</mo><mi>i</mi></mrow></msub><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mi>o</mi><mo stretchy="false">(</mo><msub><mi>x</mi><mi>j</mi></msub><mo stretchy="false">)</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">T_i=o(x_i) \Pi_{j&lt;i}(1-o(x_j))</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.036108em;vertical-align:-0.286108em;"></span><span class="mord mathnormal">o</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mord"><span class="mord">Π</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span><span class="mrel mtight">&lt;</span><span class="mord mathnormal mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.036108em;vertical-align:-0.286108em;"></span><span class="mord mathnormal">o</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mclose">))</span></span></span></span></span><span>﻿</span></span>，表示在 <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">x_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span>之前没有占用样本 <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">x_j</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.716668em;vertical-align:-0.286108em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span>，其中j&lt;i。相应的渲染占用、深度和颜色定义如下：</p><figure id="2767b463-23f3-4234-935c-5ab4d54f1348" class="image"><a href="vMAP%20Vectorised%20Object%20Mapping%20for%20Neural%20Field%20SL%201981b7333f754479812b0a51639e0265/Untitled%203.png"><img style="width:543px" src="vMAP%20Vectorised%20Object%20Mapping%20for%20Neural%20Field%20SL%201981b7333f754479812b0a51639e0265/Untitled%203.png"/></a></figure><p id="e3d4de31-968d-41c6-bdbf-68d958928bc8" class=""><strong>训练物体</strong> 对于每个对象k，我们仅采样该对象2D边界框内的训练像素，由 <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>R</mi><mi>k</mi></msup></mrow><annotation encoding="application/x-tex">R^k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.849108em;vertical-align:0em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.849108em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span></span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span>表示，并且仅针对其2D对象掩模内的像素优化深度和颜色，由 <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>M</mi><mi>k</mi></msup></mrow><annotation encoding="application/x-tex">M^k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.849108em;vertical-align:0em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.849108em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span></span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span>表示。请注意， <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>M</mi><mi>k</mi></msup></mrow><annotation encoding="application/x-tex">M^k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.849108em;vertical-align:0em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.849108em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span></span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span>始终包含在 <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>R</mi><mi>k</mi></msup></mrow><annotation encoding="application/x-tex">R^k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.849108em;vertical-align:0em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.849108em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span></span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span>中。对象k的深度、颜色和占用损失定义如下：</p><figure id="8a9700a6-22a6-4b5c-85c9-8aa3584cae98" class="image"><a href="vMAP%20Vectorised%20Object%20Mapping%20for%20Neural%20Field%20SL%201981b7333f754479812b0a51639e0265/Untitled%204.png"><img style="width:485px" src="vMAP%20Vectorised%20Object%20Mapping%20for%20Neural%20Field%20SL%201981b7333f754479812b0a51639e0265/Untitled%204.png"/></a></figure><p id="f13aaca0-4163-434d-a1d0-7b4c04e8d417" class="">然后，整个训练目标累积所有K个对象的损失:</p><figure id="0cd0297f-9b6d-425f-8207-e9d8b5b0b75e" class="image"><a href="vMAP%20Vectorised%20Object%20Mapping%20for%20Neural%20Field%20SL%201981b7333f754479812b0a51639e0265/Untitled%205.png"><img style="width:525px" src="vMAP%20Vectorised%20Object%20Mapping%20for%20Neural%20Field%20SL%201981b7333f754479812b0a51639e0265/Untitled%205.png"/></a></figure><p id="6d092357-69df-4a80-adf5-daf7b5e754c0" class="">我们选择了损失权重λ1=5和λ2=10，在实验中我们发现效果很好。</p><h2 id="8ac268a4-4f93-4612-b695-ecdf0a2e8cf1" class="">Compositional Scene Rendering</h2><p id="0d95166a-5e17-4cde-abeb-e081157cf62e" class="">由于vMAP在一个纯粹解纠缠的表示空间中表示对象，我们可以通过在其估计的3D对象范围内查询来获得每个3D对象，并且可以轻松地操作它。对于2D新视图合成，我们使用RayBox Intersection算法[15]计算每个对象的远近边界，然后沿着每条光线对渲染深度进行排序，以实现感知遮挡的场景级渲染。这种解耦表示还可以开辟其他类型的精细粒度的对象级操作，例如通过将解耦预训练特征字段作为条件来改变对象形状或纹理【21,43】，我们认为这是一个有趣的未来方向。</p><h1 id="18f66658-576f-41ec-b280-f1f12674722e" class="">Experiment</h1><p id="49636d0c-93fb-4adc-a6c4-6734826a647c" class="">我们在一系列不同的数据集上全面评估了vMAP，其中包括模拟和现实世界的序列，有和没有地面真实物体面具和姿势。对于所有数据集，我们在2D和3D场景级和对象级渲染上将我们的系统与之前最先进的SLAM框架进行定性比较。我们进一步在数据集中定量比较这些系统，其中地面真值网格可用。更多结果请见附件补充材料。</p><h2 id="d9b1a4d9-1f8f-420c-a30b-3058d28e018c" class="">Experimental Setup</h2><p id="3879128a-8317-4a2f-9579-9a112c9e7399" class="">Datasets 我们在Replica[30]、ScanNet[4]和TUM RGB-D[7]上进行了评估。每个数据集包含在对象掩模、深度和姿态测量中具有不同质量水平的序列。此外，我们还通过Azure Kinect RGB-D相机记录的自捕获视频序列展示了vMAP在复杂现实世界中的性能。表1显示了这些数据集的概述。</p><figure id="c37cff43-b87e-41b0-8f1b-a4463b91a62d" class="image"><a href="vMAP%20Vectorised%20Object%20Mapping%20for%20Neural%20Field%20SL%201981b7333f754479812b0a51639e0265/Untitled%206.png"><img style="width:534px" src="vMAP%20Vectorised%20Object%20Mapping%20for%20Neural%20Field%20SL%201981b7333f754479812b0a51639e0265/Untitled%206.png"/></a></figure><p id="ef1dc325-f4d2-4a3e-a74e-6e349cbf9724" class="">具有完美的真值信息的数据集代表了我们系统的性能上限。当结合更好的实例分割和姿态估计框架时，我们期望vMAP在现实环境中的性能可以进一步提高。</p><p id="c61b36fb-0382-487c-8316-c73049ca5809" class=""><strong>Implementation Details </strong>我们在一台带有3.60 GHz i7-11700K CPU和单个Nvidia RTX 3090 GPU的台式PC上进行所有实验。我们选择Detic[48]作为实例分割检测器，它是在一个包含1000多个对象类的开放词汇LVIS数据集[8]上进行预训练的。我们选择姿态估计框架为ORB-SLAM3[3]，因为它具有快速准确的跟踪性能。我们使用来自ORB-SLAM3的最新估计不断更新关键帧姿态。我们对所有数据集应用了相同的超参数集。我们的对象和背景模型都使用4层mlp，每个层的隐藏大小分别为32(对象)和128(背景)。对于对象/背景，我们<mark class="highlight-orange">每25/50帧选择关键帧，每个训练步骤选择120/1200条光线，每条光线10个点</mark>。一个场景中物体的数量通常在20到70之间，其中最多的对象是在Replica和ScanNet场景中，平均每个场景有50个对象。</p><figure id="6124dd7b-b9d4-40b5-ad2e-1da6bb114f4c" class="image"><a href="vMAP%20Vectorised%20Object%20Mapping%20for%20Neural%20Field%20SL%201981b7333f754479812b0a51639e0265/Untitled%207.png"><img style="width:1437px" src="vMAP%20Vectorised%20Object%20Mapping%20for%20Neural%20Field%20SL%201981b7333f754479812b0a51639e0265/Untitled%207.png"/></a></figure><figure id="42777052-b1ea-4824-8557-342a22b880dc" class="image"><a href="vMAP%20Vectorised%20Object%20Mapping%20for%20Neural%20Field%20SL%201981b7333f754479812b0a51639e0265/Untitled%208.png"><img style="width:1506px" src="vMAP%20Vectorised%20Object%20Mapping%20for%20Neural%20Field%20SL%201981b7333f754479812b0a51639e0265/Untitled%208.png"/></a></figure><figure id="f5e8fdca-6f83-4b95-8125-846e6ed8b896" class="image"><a href="vMAP%20Vectorised%20Object%20Mapping%20for%20Neural%20Field%20SL%201981b7333f754479812b0a51639e0265/Untitled%209.png"><img style="width:1461px" src="vMAP%20Vectorised%20Object%20Mapping%20for%20Neural%20Field%20SL%201981b7333f754479812b0a51639e0265/Untitled%209.png"/></a></figure><figure id="a9b5f2f8-eed7-4fa6-8962-bde47ad6f2ee" class="image"><a href="vMAP%20Vectorised%20Object%20Mapping%20for%20Neural%20Field%20SL%201981b7333f754479812b0a51639e0265/Untitled%2010.png"><img style="width:1473px" src="vMAP%20Vectorised%20Object%20Mapping%20for%20Neural%20Field%20SL%201981b7333f754479812b0a51639e0265/Untitled%2010.png"/></a></figure><figure id="49738adb-f771-40db-810b-82ca22472829" class="image"><a href="vMAP%20Vectorised%20Object%20Mapping%20for%20Neural%20Field%20SL%201981b7333f754479812b0a51639e0265/Untitled%2011.png"><img style="width:1510px" src="vMAP%20Vectorised%20Object%20Mapping%20for%20Neural%20Field%20SL%201981b7333f754479812b0a51639e0265/Untitled%2011.png"/></a></figure><p id="a33d523f-9bdd-45cb-9256-e194b5f91adf" class=""><strong>指标</strong> 根据先前工作的惯例[32,49]，我们采用Accuracy、Completion和Completion Ratio作为3D场景级重建指标。此外，我们注意到这种场景级指标严重偏向于墙壁和地板等大型物体的重建。因此，我们通过平均每个场景中所有对象的指标，在对象级别额外提供这些指标。</p><h2 id="d3c93242-4eec-4684-b768-46a4776959a9" class="">Evaluation on Scene and Object Reconstruction</h2><p id="9a4076b8-75fd-41c2-b18d-1556ec91a116" class=""><strong>Results on Replica</strong> 我们在8个Replica场景上进行了实验，使用[32]中提供的渲染轨迹，每个场景有2000个RGB-D帧。表2显示了这些Replica室内序列的平均定量重建结果。对于场景级重建，我们与TSDF-Fusion [47]、iMAP [32]和NICE-SLAM [49]进行了比较。为了隔离重建，我们还提供了这些基线方法使用地面真相姿势进行重新训练的结果（带星号），并使用其开源代码进行公平比较。具体来说，iMAP*是作为vMAP的特殊情况实现的，当将整个场景视为一个对象实例时。对于对象级重建，我们比较了使用地面真相姿势训练的基线方法。</p><p id="dc277cbd-a9cb-4799-b385-de4de50fa501" class="">vMAP由于对象级表示而具有显着的优势，可以重建小物体和具有精细细节的物体。值得注意的是，vMAP在对象级完成方面比iMAP和NICE-SLAM提高了50-70%。在图3中显示了四个选定的Replica序列的场景重建，有趣区域以彩色框突出显示。补充材料中进一步提供了2D新颖视图渲染的定量结果。</p><p id="ca021706-533c-4820-a5ef-1b711894dccf" class=""><strong>Results on ScanNet</strong> 为了评估一个更具挑战性的场景，我们对ScanNet数据集进行了实验。ScanNet数据集由真实场景组成，其地面真实深度图和物体掩模含有大量噪声。我们选择了由ObjSDF [38]所选择的ScanNet序列，并将我们的方法与TSDF-Fusion和ObjSDF进行了比较，用于物体级别的重建。我们还与NICE-SLAM进行了比较（重新训练带有姿态的地面真实数据），用于场景级别的重建。与ObjSDF不同，我们没有从预先选定的没有深度的姿态图像中进行优化，而是进行了更长时间的离线训练。我们在线运行vMAP和TSDF-Fusion，并使用深度信息。</p><figure id="f775ea4e-072b-498b-be33-67869686c1e3" class="image"><a href="vMAP%20Vectorised%20Object%20Mapping%20for%20Neural%20Field%20SL%201981b7333f754479812b0a51639e0265/Untitled%2012.png"><img style="width:720px" src="vMAP%20Vectorised%20Object%20Mapping%20for%20Neural%20Field%20SL%201981b7333f754479812b0a51639e0265/Untitled%2012.png"/></a></figure><p id="20e88ded-7972-46ef-b397-7703ac09c2ad" class=""><strong>Results on TUM RGB-D</strong> 我们在TUM RGB-D序列上评估了vMAP的表现。该序列是在现实世界中捕捉到的，对象掩码由预训练的实例分割网络预测得出[48]，姿态由ORB-SLAM3估计[3]。由于我们的对象检测器不具备时空一致性，我们发现同一对象偶尔会被检测为两个不同的实例，这会导致一些重建伪影。例如，如图6中所示的‘globe’对象在某些帧中被检测为‘balloon’，从而在最终对象重建中产生了‘分裂’伪影。总的来说，与TSDF-Fusion相比，vMAP仍然为场景中的大多数对象预测出更加连贯的重建结果，并具备真实的孔洞填充能力。然而，我们也认识到由于缺乏通用的3D先验知识，我们的系统无法完成完全不可见区域的填充（例如椅子的背部）。尽管我们的工作更侧重于映射性能而非姿态估计，但我们还是按照[32,49]报告了ATE RMSE [31]，通过将相机姿态和地图进行联合优化，我们可以观察到vMAP取得了出色的表现。这主要是因为重建和跟踪质量通常高度相关。然而，与ORB-SLAM相比，存在明显的性能差距。因此，我们直接选择ORB-SLAM作为我们的外部跟踪系统，这使得训练速度更快、实现更简洁、跟踪质量更高。</p><figure id="d98da8f3-3edb-4f1e-85f3-99f27e7ce1d1" class="image"><a href="vMAP%20Vectorised%20Object%20Mapping%20for%20Neural%20Field%20SL%201981b7333f754479812b0a51639e0265/Untitled%2013.png"><img style="width:454px" src="vMAP%20Vectorised%20Object%20Mapping%20for%20Neural%20Field%20SL%201981b7333f754479812b0a51639e0265/Untitled%2013.png"/></a></figure><p id="bba70b5b-5670-4b7a-ace5-c8d00f66f23b" class=""><strong>Results on Live Kinect Data</strong> 最后，我们展示了vMAP在桌面场景上的重建结果，这是通过Azure Kinect RGB-D相机实时运行的。如图7所示，vMAP能够从不同类别中生成一系列逼真的水密物体网格。</p><h2 id="7786bf2a-cc7c-431d-b142-2d6c9eb795b9" class=""><strong>Performance Analysis</strong></h2><p id="ab9dd450-c92a-4a41-8123-2d0c3a732b94" class="">在本节中，我们将比较vMAP系统的不同训练策略和架构设计选择。为了简单起见，所有的实验都是在Replica Room0序列上完成的，使用我们默认的训练超参数。</p><p id="ca20522d-26ae-4cd0-9a60-2deff8e860d7" class=""><strong>Memory and Runtime</strong> 为了公平比较，我们将内存使用和运行时间与表4和图9中的iMAP和NICE-SLAM进行了比较，它们都是用ground-truth姿势训练的，并且每种方法中列出了默认的训练超参数。具体来说，我们报告了训练整个序列的运行时，以及训练每个单帧的映射时间，给定完全相同的硬件。我们可以观察到vMAP在小于1M参数的情况下具有很高的内存效率。我们想强调的是，vMAP实现了更好的重建质量，并且运行速度明显快于iMAP和NICE-SLAM (~5Hz)，分别提高了1.5倍和4倍的训练速度。</p><p id="32f1e7ec-0fbf-4d2b-ab1a-f4ee2f11d7d1" class=""><strong>Vectorised v.s. Sequential Training </strong>矢量化与顺序化训练我们通过矢量化和顺序化操作(for循环)来降低训练速度，条件是不同数量的对象和不同的对象模型的大小。在图8中，我们可以看到矢量化训练可以极大地提高优化速度，特别是当我们有大量对象时。使用矢量化训练，即使我们训练多达200个对象，每个优化步骤也不超过15毫秒。此外，矢量化训练在广泛的模型尺寸范围内也是稳定的，这表明如果需要，我们可以用更大的尺寸训练我们的对象模型，并且额外的训练时间最少。正如预期的那样，当我们达到硬件内存限制时，矢量化训练和for循环最终将具有相似的训练速度。</p><p id="ca8bcec6-09df-4170-a900-e7c87ac63919" class="">为了并行训练多个模型，我们尝试的最初方法是为每个对象生成一个进程。然而，由于每个进程的CUDA内存开销，我们只能生成非常有限数量的进程，这大大限制了对象的数量。</p><p id="ba28ada1-fa24-42c6-bbc2-f9f787d25fb9" class=""><strong>Object Model Capacity</strong> 由于矢量化训练在对象模型设计方面对训练速度的影响最小，我们还研究了不同对象模型大小对对象级重建质量的影响。我们通过改变每个MLP层的隐藏大小来实验不同的对象模型大小。在图9中，我们可以看到对象级性能从隐藏大小16开始饱和，进一步增加模型大小几乎没有改善。这表明对象级表示是高度可压缩的，并且可以通过很少的参数有效和准确地参数化。</p><p id="302e2491-c604-4c31-9a5f-5d9b01198cc9" class=""><strong>Stacked MLPs v.s. Shared MLP </strong>除了用单个MLP表示每个对象之外，我们还通过将多对象映射视为多任务学习问题来探索共享MLP设计[27,34]。在这里，每个对象都额外与一个可学习的潜在代码相关联，并且该潜在代码被视为网络的条件输入，与网络权重共同优化。虽然我们已经尝试了多种多任务学习架构[13,19]，但早期的实验(图9中的vMAP-S)表明，这种共享MLP设计的重建质量略有下降，并且与堆叠的MLPs相比，没有明显的训练速度提高，特别是在矢量化训练的驱动下。此外，我们发现共享MLP设计可能导致不希望的训练属性:i)共享MLP需要与来自所有对象的潜在代码一起优化，因为网络权重和所有目标代码在共享表示空间中纠缠在一起。ii)在训练过程中，共享的MLP容量是固定的，因此随着对象数量的增加，表示空间可能不够用。这突出了解纠缠对象表示空间的优势，解纠缠对象表示空间是vMAP系统的关键设计元素。</p><h1 id="0d09fc86-b126-4259-9e21-185d681be48a" class=""><strong>Conclusion</strong></h1><p id="3dd6874a-f3b8-4477-aa35-9d052b9d964f" class="">我们已经介绍了vMAP，这是一种使用简单且紧凑的神经隐式表示的实时对象级映射系统。通过将3D场景分解为有意义的实例，由一组小的单独的MLP表示，该系统以高效且灵活的方式对3D场景进行建模，从而实现了场景重组、独立跟踪以及对感兴趣对象的持续更新。除了更加准确和紧凑的对象中心3D重建外，我们的系统还能够预测每个对象的合理水密表面，即使在部分遮挡的情况下也是如此。</p><p id="fb86016f-1e3c-4ca3-a9bd-1cb031b92127" class=""><strong>Limitations and Future Work</strong> 我们已经介绍了vMAP，这是一种使用简单且紧凑的神经隐式表示的实时对象级映射系统。通过将3D场景分解为有意义的实例，由一组小的单独的MLP表示，该系统以高效且灵活的方式对3D场景进行建模，从而实现了场景重组、独立跟踪以及对感兴趣对象的持续更新。除了更加准确和紧凑的对象中心3D重建外，我们的系统还能够预测每个对象的合理水密表面，即使在部分遮挡的情况下也是如此。</p><h1 id="32e6bd02-a2f0-4e78-be04-5bfa02bf1631" class=""><strong>Acknowledgements</strong></h1><p id="6b0c690f-c243-48ee-924d-f2cbf92a00bd" class="">本文所介绍的研究得到了戴森科技有限公司的支持。辛空持有中国国家留学基金委员会-帝国理工学院奖学金。我们非常感谢埃德加·苏卡尔、许斌斌、松下秀和阿纳格·马利克富有成果的讨论。</p><h1 id="88cc4f6f-b9b5-41d9-aa54-1ebc67e358f5" class="">A.<strong>Interactive Visualisation</strong></h1><p id="8aa9b11c-3459-4dc5-84e7-cc473151cd22" class="">我们建议读者查看我们的项目网站<a href="https://kxhit.github.io/vMAP">https://kxhit .github。io/vMAP</a>，显示了一些选定序列的实时场景级和对象级重建。</p><h1 id="26148dfa-fdcb-47d0-b44f-f4ead27a3382" class="">B.<strong>Implement Details and Discussions</strong></h1><p id="dd5e41c3-ca32-4918-8a67-687060af1816" class="">如本文所述，我们在深度测量的引导下对物体表面附近的更多点进行采样。对于穿过3D物体边界框但不属于当前实例的光线，我们然后在它们击中物体表面时终止这些光线，以尽量减少对被遮挡物体的影响，类似于ObjectNeRF[40]。深度引导采样的可视化如图A所示，采样点由测量深度着色。</p><figure id="b0890c6b-79c9-48f4-9b2a-7177a1c03928" class="image"><a href="vMAP%20Vectorised%20Object%20Mapping%20for%20Neural%20Field%20SL%201981b7333f754479812b0a51639e0265/Untitled%2014.png"><img style="width:747px" src="vMAP%20Vectorised%20Object%20Mapping%20for%20Neural%20Field%20SL%201981b7333f754479812b0a51639e0265/Untitled%2014.png"/></a></figure><p id="8ac66e81-0cd5-4430-924b-ebc800657d96" class="">由于对象实例的大小不同，当使用合适的位置编码频率进行训练时，可以最大限度地提高重建质量。否则，网络训练就会偏向于重构大对象而忽略小对象，反之亦然。为了缓解这个缩放问题，我们应用了集成位置编码[2]，并引入了一个额外的超参数，即缩放因子s，它应用于所有对象，使它们被限定在[-1,1]范围内的单位框中。我们在背景模型中单独设置这个比例因子稍微大一些。</p><p id="2cacc984-dc75-4d68-b930-f7b990c99b65" class="">如果已知特定对象的先验，则可以将此比例因子设置为特定对象，即我们可以在训练对象“沙发”时设置大s，在训练对象“杯子”时设置小s，因为沙发通常比杯子大。图b显示了不同s选择下物体重建的可视化效果。我们可以看到，大尺度s的结果是更平滑的几何形状，更适合重建像“墙壁”和“毯子”这样的大型物体，而小尺度s更适合重建像“椅子”这样的复杂几何形状的物体。</p><h1 id="55c89c1a-f511-4fad-af34-af02ac3ff6f7" class="">C.Additional Experimental Results on Replica Scenes</h1><p id="bc7b189b-c90a-4e07-9700-9c4d24156b77" class="">在表A和表B，我们列出了Replica数据集上每个序列的详细场景级和对象级3D重建结果。</p><figure id="67cbe72a-6176-4cc7-a5e4-6788bd7b6f48" class="image"><a href="vMAP%20Vectorised%20Object%20Mapping%20for%20Neural%20Field%20SL%201981b7333f754479812b0a51639e0265/Untitled%2015.png"><img style="width:1540px" src="vMAP%20Vectorised%20Object%20Mapping%20for%20Neural%20Field%20SL%201981b7333f754479812b0a51639e0265/Untitled%2015.png"/></a></figure><figure id="5175807f-039a-4917-8703-7fff669b8567" class="image"><a href="vMAP%20Vectorised%20Object%20Mapping%20for%20Neural%20Field%20SL%201981b7333f754479812b0a51639e0265/Untitled%2016.png"><img style="width:1416px" src="vMAP%20Vectorised%20Object%20Mapping%20for%20Neural%20Field%20SL%201981b7333f754479812b0a51639e0265/Untitled%2016.png"/></a></figure><p id="aa6243f3-3c9e-455f-a34d-0b330e4e6a70" class="">我们为Replica数据集中的每个场景生成了一个新的/不同的序列。我们进行了2D新视图合成，并将其与生成序列中的ground-truth视图进行了比较。我们比较了表C中深度L1误差、PSNR、SSIM和LPIPS的基线，同时所选3个场景的二维效果图如图C所示。</p><h1 id="638d3ff9-0b63-4112-afad-d2f7f1efdadb" class="">D.Visualisation of Object-level Hole-filling</h1><p id="44c79915-3c41-40b4-920a-8f7a7031ce09" class="">与iMAP和NICE-SLAM相比，vMAP在未观测区域具有更好的填充能力，且具有视觉一致性，这得益于解纠缠的对象表示设计。如图D所示，vMAP能够在不需要任何其他先验的情况下生成光滑和自然的几何形状。</p><figure id="8796e88c-a2cb-459a-a145-86c283e4055b" class="image"><a href="vMAP%20Vectorised%20Object%20Mapping%20for%20Neural%20Field%20SL%201981b7333f754479812b0a51639e0265/Untitled%2017.png"><img style="width:871px" src="vMAP%20Vectorised%20Object%20Mapping%20for%20Neural%20Field%20SL%201981b7333f754479812b0a51639e0265/Untitled%2017.png"/></a></figure><figure id="4b05d468-b8ed-4d09-bb9a-176043746259" class="image"><a href="vMAP%20Vectorised%20Object%20Mapping%20for%20Neural%20Field%20SL%201981b7333f754479812b0a51639e0265/Untitled%2018.png"><img style="width:921px" src="vMAP%20Vectorised%20Object%20Mapping%20for%20Neural%20Field%20SL%201981b7333f754479812b0a51639e0265/Untitled%2018.png"/></a></figure></div></article></body></html>

@@ -1,0 +1,677 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>*RO-MAP: Real-Time Multi-Object Mapping with Neural Radiance Fields</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-interactiveBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-translucentGray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="250676cf-f3b5-4f20-99f9-9411decae496" class="page sans"><header><h1 class="page-title">*RO-MAP: Real-Time Multi-Object Mapping with Neural Radiance Fields</h1><p class="page-description"></p></header><div class="page-body"><figure id="5d64bb0d-0bda-4cd4-8556-79219c4c2899" class="image"><a href="RO-MAP%20Real-Time%20Multi-Object%20Mapping%20with%20Neural%20%20250676cff3b54f2099f99411decae496/Untitled.png"><img style="width:431px" src="RO-MAP%20Real-Time%20Multi-Object%20Mapping%20with%20Neural%20%20250676cff3b54f2099f99411decae496/Untitled.png"/></a></figure><h1 id="8656d0f0-af04-405c-8134-965b958f58dc" class="">Abstract</h1><p id="b066cb19-975b-4af7-8b88-3a1b00b9ee6a" class="">准确感知环境中的物体对于提高SLAM系统的场景理解能力至关重要。在机器人和增强现实应用中，具有语义和度量信息的对象地图显示出诱人的优势。本文提出了一种不依赖于三维先验的多目标映射管道RO-MAP。在<mark class="highlight-orange">单目输入</mark>的情况下，我们使用神经辐射场来表示物体，并将其与基于多视图几何的轻量级物体SLAM相耦合，<mark class="highlight-orange">同时定位物体并隐式学习其密集几何</mark>。我们为每个检测到的对象创建单独的隐式模型，并随着新的观察值的增加而动态地并行地训练它们。在合成数据集和真实数据集上的实验表明，该方法可以通过形状重建生成语义对象图，在实现实时性(25Hz)的同时，与离线方法相竞争。代码和数据集可在https://github.com/XiaoHanGit/RO-MAP上获得</p><h1 id="000f30c5-91e9-4e8f-84d2-d24dd218141f" class="">Introduction</h1><p id="2a04ab60-fbff-49dd-847a-1471572af09b" class="">基于视觉的同步定位与映射(SLAM)是机器人领域的一个重要研究问题，近十年来取得了显著的进展。先前的研究[1]-[3]集中在提供精确的自运动估计和重建场景地图。然而，通过这些方法构建的稀疏或密集地图只包含度量信息，这限制了它们在需要场景理解的复杂任务中的应用[4]、[5]。深度学习的发展为在SLAM中引入语义信息铺平了道路，结合检测[6]或语义分割[7]的对象SLAM引起了许多研究者的兴趣。</p><p id="87e9b8ed-8335-40b9-814b-80190cc792ae" class="">与纯粹的几何地图不同，对象SLAM利用额外的语义观测来定位和重建场景中的对象，生成的对象地图可以服务于下游任务。然而，一个关键的问题是如何有效地表示对象。一些仅使用RGB相机的研究已经探索了简单的几何基元，如长方体[8]，[9]，椭球体[10]-[12]和超二次曲面[13]。这些压缩表示包含对象的基本信息，如类别、大小和姿态。它们可以作为定位和导航的语义地标[4]，并在SLAM系统的再定位[14]、[15]和长期运行中显示出优势。然而，这些几何基元不能捕获物体的形状和纹理信息，这对基于单眼的方法提出了挑战。</p><p id="9385d5bf-0081-4905-ae4b-7c624a500447" class="">物体形状重建是另一个被广泛研究的问题。一些研究利用额外的深度传感器探索了各种密集物体表示，如surfels[16]和有符号距离函数(signed distance function, SDF)[17]，[18]。此外，使用可学习的紧凑形状嵌入来表示对象也很受欢迎。最近的研究[19]-[22]使用神经网络学习类别级形状先验，并通过匹配图像或深度观察来优化潜在空间中的物体形状代码，然后将其解码为体素网格[19]或隐式函数[20][22]。这些方法可以从局部观测中生成密集和完整的物体重建，但它们受到预学习先验类别的限制，不能处理任意几何形状。一个自然的问题是，我们是否可以只使用单目相机重建物体，没有任何几何先验。神经辐射场(Neural Radiance Fields, NeRF)[23]是合适的对象表示。借助体绘制和MLP强大的拟合能力，NeRF可以从RGB图像中隐式学习三维几何。近年来，其在SLAM中的成功应用[24]，[25]显示了其强大的潜力。</p><p id="89e0904b-2a11-47c7-b81f-a722e4ab4b26" class="">在这项工作中，我们提出了一个用于从单目视频中重建多个对象的在线管道，该管道由两个松散耦合的组件组成。第一个组件是基于ORBSLAM2[1]框架构建的轻量级对象SLAM。我们使用实例分割来检测场景中的物体并估计它们的大小和姿态，并且稳健的数据关联算法确保多视图观察正确地关联到物体上。第二个组件是一个多目标重建系统，其中每个对象实例由NeRF表示，并实时接收新的观测值以进行增量训练。我们提出了一种针对目标的高效损失函数，以加快收敛速度并减少RGBonly图像引起的深度模糊。此外，我们基于tenn框架的CUDA实现[26]确保了实时性能。在单个GPU上，每个对象的平均训练时间约为2秒。在合成和收集的真实数据集上进行的综合实验证明了我们的方法的有效性。</p><p id="3ac007e5-b294-4b39-93c4-54356470291b" class=""><mark class="highlight-orange">本工作的贡献如下:</mark></p><p id="052cb258-2e68-4340-ba0b-8072dad466a2" class="">我们提出，据我们所知，<mark class="highlight-orange">第一个3D先验自由单目多对象映射管道</mark>，可以定位和重建场景中的对象。我们提出了一个有效的对象损失函数，结合高性能CUDA实现，使系统具有实时性能。</p><p id="60d31e17-337c-409b-90a7-024b1bc9d348" class="">我们评估了所提出的方法在合成和真实数据集上的有效性。此外，还将发布代码和数据集。</p><figure id="753ec21d-c3c5-481c-a557-de88ac26cfb6" class="image"><a href="RO-MAP%20Real-Time%20Multi-Object%20Mapping%20with%20Neural%20%20250676cff3b54f2099f99411decae496/Untitled%201.png"><img style="width:868px" src="RO-MAP%20Real-Time%20Multi-Object%20Mapping%20with%20Neural%20%20250676cff3b54f2099f99411decae496/Untitled%201.png"/></a></figure><h1 id="6f7a3443-4d47-4ed6-b2f6-58fe4e345faf" class="">System Overview</h1><p id="05b564e3-f95c-48c9-ab3c-e9a940c755fe" class="">图2显示了所提出方法的概述。<mark class="highlight-orange">该管道由两个主要部分组成</mark>，<mark class="highlight-orange">一个是轻量级对象SLAM系统，另一个是多对象NeRF系统</mark>。给定一个单目相机在包括RGB图像和实例分割的常规输入流中，我们的对象SLAM系统同时估计相机帧姿态并定位场景中的对象。我们利用<mark class="highlight-orange">来自实例分割的语义信息</mark>和<mark class="highlight-orange">来自与对象相关的稀疏点云的几何信息</mark>来执行数据关联和对象姿态和大小估计。运算结果和原始图像输入被送入多目标重建系统。在这一部分中，每个对象实例都由一个单独的NeRF模型表示。它们实时接收新的观察结果，并进行并行训练。我们使用行军立方体算法[39]提取视觉三维网格，并通过物体姿态将其转换为全局坐标系，从而构建完整的密集物体图。</p><h1 id="35316c6e-7cc1-484d-b0b2-3b1630186497" class="">LIGHTWEIGHT OBJECT SLAM</h1><p id="2f16efa8-43fc-4b40-9e0e-087578c62e30" class="">我们的对象SLAM是基于ORB-SLAM2实现的[1]，并使用一种轻量级的、手工制作的方法来定位对象，而不是基于学习的方法。相机姿态估计与原ORB-SLAM2一致，即只使用传统的重投影误差。此外，我们采用了一种基于稀疏点云的语义信息和统计信息的方法来自动关联多视图观测与目标地标。然而，数据关联并不是本文的重点，具体请参考我们之前的工作[13]。</p><h2 id="7b065520-c3ed-4776-8533-a7abf14c9af0" class="">Outlier Removal</h2><p id="803abd67-ee67-4f39-bb77-e1e2431b4bdb" class="">提取图像特征后，<mark class="highlight-orange">将位于检测框内且被实例掩码覆盖的特征点与对象关联</mark>。在后续跟踪过程中，这些点被注册到稀疏点云图中，大致代表物体的位置。然而，由于测量噪声和遮挡的影响，相关的稀疏点云往往包含许多不属于目标的离群点。我们<mark class="highlight-orange">使用扩展隔离林(EIF)[40]来去除异常值</mark>并维持精确拟合物体的稀疏点云。具体来说，EIF使用一个具有随机斜率的平面递归分割样本空间，逐渐减少每个封闭空间中的样本数量，直到每个样本被隔离或达到深度极限。显然，在多视图观测后，定位在物体表面的点趋于密集，需要更多的步骤来隔离。我们移除那些在很少的步骤之后被孤立的点，这些点很可能是异常值。</p><h2 id="6558fff0-fb2c-4133-86ac-6b7d6b81cf01" class="">Pose and Size Estimation</h2><p id="74f5c48b-195f-4563-8778-721cbe0a82e7" class="">我们用长方体来表示物体，并假设物体总是静止的，并且放在一个支撑物上，横摇角和俯仰角固定为零，因此只需要估计平移角t和偏航角θ。首先，我们直接计算滤波后的点云中心 <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>P</mi><mi>W</mi></msup></mrow><annotation encoding="application/x-tex">P^W</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8413309999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">W</span></span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span>来估计平移t，公式如下:</p><figure id="630ee143-de5f-4c51-9fed-8951a8f52c09" class="image"><a href="RO-MAP%20Real-Time%20Multi-Object%20Mapping%20with%20Neural%20%20250676cff3b54f2099f99411decae496/Untitled%202.png"><img style="width:328px" src="RO-MAP%20Real-Time%20Multi-Object%20Mapping%20with%20Neural%20%20250676cff3b54f2099f99411decae496/Untitled%202.png"/></a></figure><p id="77da05d0-6d75-4824-8ca4-4fe7b89cf326" class="">对于物体旋转，<mark class="highlight-orange">首先考虑简单有效的主成分分析(PCA)方法</mark>。我们将三维稀疏点云投影到水平面上，然后使用PCA计算其主导方向作为相应的旋转矩阵。然而，这种方法对于长方体物体(如书籍和键盘)表现不佳，因为提取的主方向与理想的正交边缘明显偏离。这将导致物体姿态估计不准确，并进一步影响随后的形状重建。<mark class="highlight-orange">为了提高旋转估计的鲁棒性，我们结合了一种基于物体外观的线特征对齐方法。</mark>具体来说，我们首先将物体边界框的三个正交边 <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>l</mi><mi>i</mi></msub><mo stretchy="false">(</mo><mi>i</mi><mo>∈</mo><mn>1</mn><mo separator="true">,</mo><mn>2</mn><mo separator="true">,</mo><mn>3</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">l_i(i\in1,2,3)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.01968em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">2</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">3</span><span class="mclose">)</span></span></span></span></span><span>﻿</span></span>投影到图像上，然后提取线特征[41]，并选择与投影线段斜率相似的线段作为观测值。已提取线段 <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>l</mi><mrow><mi>d</mi><mi>i</mi></mrow></msub></mrow><annotation encoding="application/x-tex">l_{di}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.84444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:-0.01968em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">d</span><span class="mord mathnormal mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span>和投影线段 <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>l</mi><mrow><mi>o</mi><mi>i</mi></mrow></msub></mrow><annotation encoding="application/x-tex">l_{oi}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.84444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.01968em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">o</span><span class="mord mathnormal mtight">i</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span>之间的累积角度误差被优化用来估计偏航角θ，该优化函数被定义为：</p><figure id="c538bf5b-1fd5-4f1a-b7cc-e3925c540a8c" class="image"><a href="RO-MAP%20Real-Time%20Multi-Object%20Mapping%20with%20Neural%20%20250676cff3b54f2099f99411decae496/Untitled%203.png"><img style="width:646px" src="RO-MAP%20Real-Time%20Multi-Object%20Mapping%20with%20Neural%20%20250676cff3b54f2099f99411decae496/Untitled%203.png"/></a></figure><p id="ad63face-64bc-4ffe-9a2b-0900e0347914" class="">其中g(.)计算线段的斜率。Twc表示相机姿态，K是相机固有矩阵。对于这个非线性优化问题，一个好的初始值是至关重要的。我们在-45°到45°范围内均匀采样，间隔5度，选取误差最小的样本作为初始值进行优化。最后，我们得到由估计的目标姿态变换到目标坐标系的稀疏点云 <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>P</mi><mi>O</mi></msup></mrow><annotation encoding="application/x-tex">P^O</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8413309999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">O</span></span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span>，并直接计算大小 <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mo>=</mo><mo stretchy="false">[</mo><msub><mi>a</mi><mi>x</mi></msub><mo separator="true">,</mo><msub><mi>a</mi><mi>y</mi></msub><mo separator="true">,</mo><msub><mi>a</mi><mi>z</mi></msub><msup><mo stretchy="false">]</mo><mi>T</mi></msup></mrow><annotation encoding="application/x-tex">a =[a_x, a_y, a_z]^T</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">a</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.1274389999999999em;vertical-align:-0.286108em;"></span><span class="mopen">[</span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">x</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.15139200000000003em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03588em;">y</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.04398em;">z</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose"><span class="mclose">]</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">T</span></span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span>如下:</p><figure id="fa863bb1-26fc-4b04-8939-6fbe196ac0a6" class="image"><a href="RO-MAP%20Real-Time%20Multi-Object%20Mapping%20with%20Neural%20%20250676cff3b54f2099f99411decae496/Untitled%204.png"><img style="width:546px" src="RO-MAP%20Real-Time%20Multi-Object%20Mapping%20with%20Neural%20%20250676cff3b54f2099f99411decae496/Untitled%204.png"/></a></figure><h1 id="92c1bfcd-bf57-4acb-8dbe-8055feb2afb5" class="">MULTI-OBJECT RECONSTRUCTION</h1><p id="3f679a30-d5a5-44a6-8918-c3bcdd8b0d9b" class=""><mark class="highlight-orange">在估计了物体SLAM中的边界框和相机姿态后，我们使用NeRF隐式学习物体的密集几何形状</mark>。当检测到一个新的对象实例时，我们初始化一个新的<mark class="highlight-orange">NeRF模型，</mark><mark class="highlight-orange">它由一个多分辨率哈希编码[33]和一个单层MLP组成。</mark>与一些使用nerf重建整个场景的方法不同，我们的模型只需要表示单个对象，这允许我们使用微小的网络结构并大大加快训练速度。此外，我们利用多线程并行训练模型，从而进一步提高系统效率。</p><figure id="d953dffd-d8a2-4f48-8523-477c38c109c8" class="image"><a href="RO-MAP%20Real-Time%20Multi-Object%20Mapping%20with%20Neural%20%20250676cff3b54f2099f99411decae496/Untitled%205.png"><img style="width:796px" src="RO-MAP%20Real-Time%20Multi-Object%20Mapping%20with%20Neural%20%20250676cff3b54f2099f99411decae496/Untitled%205.png"/></a></figure><h2 id="beeed38a-539b-4834-9a6c-7ff461cc458f" class="">Training Data</h2><p id="951f6ffb-d245-44ea-bd7b-8a32e1d5cccd" class="">由于SLAM中相邻帧之间的视点变化很小，使用所有图像进行训练会引入大量冗余信息。我们<mark class="highlight-orange">只使用那些在跟踪过程中被选为关键帧的图像。</mark>除了原始的RGB图像和实例蒙版，类似于[42]，我们还包括现成的几何信息。在摄像机跟踪过程中，<mark class="highlight-orange">每帧的一些像素与稀疏点云相关联</mark>，稀疏点云的估计深度可以为训练提供额外的监督。这有助于模型学习精确的几何形状。</p><p id="e55548e6-9dae-40b3-b476-47ee34929a2e" class="">对于所有的对象实例，它们有不同的训练数据和不同的出现时间。我们实现了对训练数据的增量更新方法来分别处理每个模型。如图3所示，假设最后一次更新的图像为Im，当前观测到的目标图像为In，我们计算它们相对于目标的相对旋转角度如下:</p><figure id="18be5004-f7ae-44f5-aed1-729e4682576a" class="image"><a href="RO-MAP%20Real-Time%20Multi-Object%20Mapping%20with%20Neural%20%20250676cff3b54f2099f99411decae496/Untitled%206.png"><img style="width:593px" src="RO-MAP%20Real-Time%20Multi-Object%20Mapping%20with%20Neural%20%20250676cff3b54f2099f99411decae496/Untitled%206.png"/></a></figure><p id="c95dd216-11ed-447b-ab85-32dba33d40cd" class="">如果 <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi></mrow><annotation encoding="application/x-tex">\alpha</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.0037em;">α</span></span></span></span></span><span>﻿</span></span>大于预设阈值，则更新训练数据。初始模型只有几个观察点，并且每次更新只训练几个迭代。随着视点的增加，训练迭代的次数逐渐加快收敛增长。</p><h2 id="cb726b0d-72b3-424a-888b-7152b940572d" class="">Volume Rendering</h2><p id="b32f821f-0ca4-419c-9d15-88d7e2511a1d" class="">可微体绘制用于优化对象的隐式表示。我们首先将相机姿态转换为物体坐标系，并将物体检测框内的像素反向投影。如果射线与三维边界框相交，我们计算截断距离并在其中采样N个点。与其他仅rgb隐式重建方法不同，我们<mark class="highlight-orange">只执行均匀采样</mark>，不包括流行的重要性采样。这样可以节省模型一个推理过程的时间成本，但会对重建质量造成一定的影响。</p><p id="744fd04f-ad69-4d40-b7d6-ad38b81a0802" class="">由于我们对密集重建比对新视图合成更感兴趣，因此<mark class="highlight-orange">只对采样点的位置进行编码</mark>并将其输入网络以估计其密度值σ和颜色c，而不包括射线方向。对于点xi，它的占有概率为 <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>o</mi><mi>i</mi></msub><mo>=</mo><mn>1</mn><mo>−</mo><mi>e</mi><mi>x</mi><mi>p</mi><mo stretchy="false">(</mo><mo>−</mo><msub><mi>σ</mi><mi>i</mi></msub><msub><mi>δ</mi><mi>i</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">o_i=1-exp(-\sigma_i\delta_i)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">o</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">e</span><span class="mord mathnormal">x</span><span class="mord mathnormal">p</span><span class="mopen">(</span><span class="mord">−</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03785em;">δ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.03785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span><span>﻿</span></span>，概率为 <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>w</mi><mi>i</mi></msub><mo>=</mo><msub><mi>o</mi><mi>i</mi></msub><msubsup><mo>∏</mo><mrow><mi>j</mi><mo>−</mo><mn>1</mn></mrow><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow></msubsup><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><msub><mi>o</mi><mi>i</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">w_i=o_i\prod^{i-1}_{j-1}(1-o_i)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.400382em;vertical-align:-0.43581800000000004em;"></span><span class="mord"><span class="mord mathnormal">o</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop"><span class="mop op-symbol small-op" style="position:relative;top:-0.0000050000000000050004em;">∏</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.964564em;"><span style="top:-2.40029em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05724em;">j</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.2029em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.43581800000000004em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal">o</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span><span>﻿</span></span> 表示射线终止于该点，其中 <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>δ</mi><mi>i</mi></msub><mo>=</mo><msub><mi>d</mi><mrow><mi>i</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>−</mo><msub><mi>d</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">\delta_i = d_{i+1}-d_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.84444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03785em;">δ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.03785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.902771em;vertical-align:-0.208331em;"></span><span class="mord"><span class="mord mathnormal">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mbin mtight">+</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.84444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span>为相邻样本点之间的距离差。最后，<mark class="highlight-orange">对应光线r的预测颜色和深度定义如下</mark>:</p><figure id="5e0bc0e3-edb8-4dcf-9731-2c6cbed7cb1f" class="image"><a href="RO-MAP%20Real-Time%20Multi-Object%20Mapping%20with%20Neural%20%20250676cff3b54f2099f99411decae496/Untitled%207.png"><img style="width:365px" src="RO-MAP%20Real-Time%20Multi-Object%20Mapping%20with%20Neural%20%20250676cff3b54f2099f99411decae496/Untitled%207.png"/></a></figure><p id="dea68595-f8ed-410a-856c-a58a9102afc7" class="">物体重建需要抑制背景和遮挡物，因为物体不是孤立的，而是嵌入在场景中。实例掩码包含有效的空间语义信息，用于指导学习对象及其周围环境的几何分布。我们按照[37]中的策略，对射线的优化损失进行分类。具体来说，我们<mark class="highlight-orange">根据射线实例的掩码将采样射线分为三种类型</mark>。<mark class="highlight-orange">对于击中重建对象（即其掩码值m与对象实例Mo匹配）的射线Ro</mark>，我们按照通常的方式计算其光度损失：</p><figure id="bfc9f26f-4434-40a1-b4b3-cbbca885802f" class="image"><a href="RO-MAP%20Real-Time%20Multi-Object%20Mapping%20with%20Neural%20%20250676cff3b54f2099f99411decae496/Untitled%208.png"><img style="width:565px" src="RO-MAP%20Real-Time%20Multi-Object%20Mapping%20with%20Neural%20%20250676cff3b54f2099f99411decae496/Untitled%208.png"/></a></figure><p id="409e0805-e0a5-4138-a81b-7b911f0542d8" class="">对于一些<mark class="highlight-orange">有深度监督的射线Rd</mark> ，还包括额外的深度损失:</p><figure id="f929ae14-574b-4c60-b58b-7402af40b49d" class="image"><a href="RO-MAP%20Real-Time%20Multi-Object%20Mapping%20with%20Neural%20%20250676cff3b54f2099f99411decae496/Untitled%209.png"><img style="width:333px" src="RO-MAP%20Real-Time%20Multi-Object%20Mapping%20with%20Neural%20%20250676cff3b54f2099f99411decae496/Untitled%209.png"/></a></figure><p id="0e66fbaa-352c-4890-8750-ae344ebe4515" class="">第二，<mark class="highlight-orange">我们期望物体外的空间是空的，也就是说，指向它们的光线不应该终止</mark>。为了实现这一点，我们给那些<mark class="highlight-orange">与背景不同的随机颜色相对应的射线Rb作为监督</mark>，引导它们学习零密度:</p><figure id="9385456a-2c01-480f-b074-e5de2555f62d" class="image"><a href="RO-MAP%20Real-Time%20Multi-Object%20Mapping%20with%20Neural%20%20250676cff3b54f2099f99411decae496/Untitled%2010.png"><img style="width:575px" src="RO-MAP%20Real-Time%20Multi-Object%20Mapping%20with%20Neural%20%20250676cff3b54f2099f99411decae496/Untitled%2010.png"/></a></figure><p id="c9707b6a-f289-491e-8f55-de53032266cc" class="">然而，这种损失导致的体积密度的收敛速度很慢，需要进行多轮优化。我们提出了一种高效且激进的损失方法，跳过体积渲染，直接优化采样点的密度，如下所示:</p><figure id="270beb02-cbe6-49e2-bbbe-83f01a72c298" class="image"><a href="RO-MAP%20Real-Time%20Multi-Object%20Mapping%20with%20Neural%20%20250676cff3b54f2099f99411decae496/Untitled%2011.png"><img style="width:551px" src="RO-MAP%20Real-Time%20Multi-Object%20Mapping%20with%20Neural%20%20250676cff3b54f2099f99411decae496/Untitled%2011.png"/></a></figure><p id="ccfb7d7a-3e91-45ed-b8cd-b0edbb80d0fd" class="">虽然它看起来不美观，但它可以快速提高收敛速度，并有助于减少单目图像造成的深度模糊。图3展示了一个例子，由于图像Ij中的背景射线学习了零密度，因此指向图像Ik中的物体的光线可以快速聚焦于物体附近的优化。最后，对于击中其他遮挡物体的光线，我们不构建优化损失，因为我们无法指定它们路径上的空间信息。总的来说，<mark class="highlight-orange">对象实例的总损失定义</mark>为:</p><figure id="40066828-e3f6-46d4-992d-23965ddacbc4" class="image"><a href="RO-MAP%20Real-Time%20Multi-Object%20Mapping%20with%20Neural%20%20250676cff3b54f2099f99411decae496/Untitled%2012.png"><img style="width:624px" src="RO-MAP%20Real-Time%20Multi-Object%20Mapping%20with%20Neural%20%20250676cff3b54f2099f99411decae496/Untitled%2012.png"/></a></figure><p id="93dbec96-8017-476f-a835-fc15ba8a9b9b" class="">其中λ1和λ2是损失权值。</p><h1 id="39fdf114-fea3-4860-a5ee-f1ed30b9e803" class="">Experiment</h1><p id="1a84d11a-25a3-415e-ba67-7feeeb9d24f5" class="">我们在合成和现实世界的数据集上评估了提出的管道，并与其他方法进行了定性和定量比较。由于NeRF训练对目标定位的要求较低，即估计的边界框只需要松散地包围目标，因此我们重点关注形状重建的评估。我们还提供了详细的运行时分析和消融研究，以支持我们的设计选择。考虑到我们方法的在线性质，请参阅附件中的视频演示。</p><figure id="acd49cf2-7db1-4125-b5c2-3f97108b7a51" class="image"><a href="RO-MAP%20Real-Time%20Multi-Object%20Mapping%20with%20Neural%20%20250676cff3b54f2099f99411decae496/Untitled%2013.png"><img style="width:734px" src="RO-MAP%20Real-Time%20Multi-Object%20Mapping%20with%20Neural%20%20250676cff3b54f2099f99411decae496/Untitled%2013.png"/></a></figure><p id="c883b557-f8e3-415b-b3bf-cd9d423538b5" class="">1)实现细节:我们的流水线是使用c++和CUDA实现的，所有实验都是在一台配备3.0GHz Intel Xeon 6154 CPU和NVIDIA RTX 4090 GPU的台式计算机上进行的。所有对象实例使用相同的NeRF模型参数，包括哈希表大小T= 216，最佳分辨率Nmax= 2048，以及单层MLP的隐藏大小64。对于体绘制，每次接收到新的观测值时，我们都会触发300次训练迭代。每次迭代从所有训练图像中随机抽取4096条射线，每条射线取N = 32个采样点。此外，我们设置损失权值λι = 0.5， λ2 = 0.01，训练数据更新阈值a = 25°。行军立方体[39]用于在线提取网格，所有对象的分辨率相同，为643。</p><p id="9914dbb0-e3ac-45ed-b299-421de5bfbb30" class="">2)基线:我们比较了经典的MVS方法COLMAP[43]和同样基于NeRF的隐式对象重建方法[37]。我们忠实地重新实现后者，记为[37]*。请注意，这两种比较方法都是离线运行的，并不关心相机和物体的定位。在我们的方法运行后，我们保存了相应的训练数据，并将其作为比较方法的输入，以保证公平的比较。</p><p id="629927e8-33fc-46ed-af75-0b5873b536f2" class="">3)数据集和度量:我们在合成Cube-Diorama数据集[37]和我们自己收集的真实数据集上进行评估。前者由Blender生成，提供真实深度和实例分割。准确度、完成率和完成率用于定量评价目标重建。由于单眼SLAM系统的尺度模糊，我们使用ICP[44]对重建网格和GT网格进行对齐。</p><figure id="3f1bc5b0-445c-47d4-8eb7-62a1a0dd1472" class="image"><a href="RO-MAP%20Real-Time%20Multi-Object%20Mapping%20with%20Neural%20%20250676cff3b54f2099f99411decae496/Untitled%2014.png"><img style="width:877px" src="RO-MAP%20Real-Time%20Multi-Object%20Mapping%20with%20Neural%20%20250676cff3b54f2099f99411decae496/Untitled%2014.png"/></a></figure><figure id="abc5cd4a-1ac3-463b-bb8f-d54877a5e06d" class="image"><a href="RO-MAP%20Real-Time%20Multi-Object%20Mapping%20with%20Neural%20%20250676cff3b54f2099f99411decae496/Untitled%2015.png"><img style="width:432px" src="RO-MAP%20Real-Time%20Multi-Object%20Mapping%20with%20Neural%20%20250676cff3b54f2099f99411decae496/Untitled%2015.png"/></a></figure><h2 id="33b39e2c-365f-476c-b465-da31c6c2fca5" class="">A.Object Reconstruction Evaluation</h2><p id="ef639336-4217-46c5-ad9b-08d95c6bc544" class="">1)合成序列:我们首先在合成房间序列上评估物体重建的质量，在合成房间序列中，相机围绕桌面旋转，捕获四个不同形状的物体，包括一本书，一台笔记本电脑，一个杯子和一个蓝色的钟。我们使用真值实例掩模来测试系统性能的上界，另外给出了[37]用真值深度训练的结果供参考。表1给出了定量结果。得益于隐式表示和体绘制的强大能力，我们的方法明显优于基于COLMAP的传统方法，该方法难以处理黑色或无纹理的物体表面。与[37]相比，我们在实现在线重建时获得了相当的性能。正如预期的那样，在[37]中使用额外的底真值深度使其更容易捕获几何信息，产生更好的结果。图4显示了所有对象的可视化结果。该方法不仅可以生成无懈可击的目标网格，而且可以构造具有语义信息的多目标地图。然而，由于估计相机姿势中的反射和噪声，所有仅rgb的方法都会受到伪影的影响，特别是在难以学习的杯内腔中。这对于没有3D先验的单眼重建来说仍然是一个挑战。</p><p id="8a4f14a3-74d3-45f8-903f-02633eb7e90c" class="">2)真实世界序列:我们使用英特尔Realsense D455相机收集的真实场景进行评估，如图1所示，该场景也围绕桌面上的四个对象进行旋转。噪声对象掩码由YOLOv8提供，具有实时性。图5为定性结果。我们可以看到，COLMAP无法重建非lambertian笔记本电脑屏幕，导致出现了较大的孔洞。与[37]相比，我们的方法生成的对象重构更完整，视觉质量更好。</p><p id="2875c895-22cf-4ab3-8af7-3b6fe2607566" class="">3)挑战现实世界的序列:在机器人或AR的实际应用中，通常不可能从物体的所有视点获得观察结果。我们提供了一个具有挑战性的真实世界序列，其中包含八个不同形状的物体，并且相机只能沿着受限的运动轨迹提供有限的视点观察。图6显示了我们的方法的场景和定性结果。我们可以看到，我们的方法可以准确地定位和重建目标，并且在观察视点中生成的目标网格与背景分离良好。然而，对于目标的未观测区域，基于插值的多分辨率特征网格虽然具有一定的预测能力，但仍然不能产生令人满意的结果。从部分观测中重建物体是未来工作的一个有趣方向，最近的一项工作[45]已经进行了一些探索。</p><figure id="324f61b7-2d61-4520-8787-dca4990702d2" class="image"><a href="RO-MAP%20Real-Time%20Multi-Object%20Mapping%20with%20Neural%20%20250676cff3b54f2099f99411decae496/Untitled%2016.png"><img style="width:435px" src="RO-MAP%20Real-Time%20Multi-Object%20Mapping%20with%20Neural%20%20250676cff3b54f2099f99411decae496/Untitled%2016.png"/></a></figure><h2 id="f89fa17c-d9af-4904-8b8d-8936b89787a4" class="">B. Runtime analysis</h2><p id="4f47730f-eb3f-4cdf-9103-3bf3a0991c85" class="">我们对提议的管道进行了计算分析。表2显示了不同序列中每个主要组件的平均计算时间的详细细分。对于目标SLAM，由于我们的轻量级目标姿态估计方法是手工制作的，因此只在原始ORB-SLAM2的基础上增加了少量的时间消耗。对于单个NeRF模型，我们的高性能并行CUDA实现只需要0.7ms的一次迭代训练。不同对象实例所需的迭代次数取决于观察到的视角的大小。平均而言，每个对象需要2700次迭代训练，耗时约2秒。与整个场景重建相比，单个对象的表示和优化允许我们使用微小的网络和简单的采样策略，有助于减少并行计算中的分支发散问题，提高训练速度。此外，我们的实现还支持多gpu，即可以将多个对象分配给多个gpu进行训练。总的来说，我们的流水线可以以22-25 Hz的帧率运行。</p><figure id="17e24690-5b9c-4785-8d96-e62f30199f30" class="image"><a href="RO-MAP%20Real-Time%20Multi-Object%20Mapping%20with%20Neural%20%20250676cff3b54f2099f99411decae496/Untitled%2017.png"><img style="width:775px" src="RO-MAP%20Real-Time%20Multi-Object%20Mapping%20with%20Neural%20%20250676cff3b54f2099f99411decae496/Untitled%2017.png"/></a></figure><h2 id="b8cec200-0b6b-46da-a2d6-57347db1d64e" class="">C. Ablation study</h2><p id="782153a8-593d-49fd-a220-bccf248f27b7" class="">单目输入引起的深度模糊对学习无纹理或光滑物体的几何形状有重大影响，例如导致收敛缓慢和分散的伪影。我们评估了密度损失Ldensity对于有效在线重建的重要性。图7的收敛图显示了合成序列的比较结果。我们可以看到使用所有的损失可以获得更好的性能。在没有密度损失的情况下，仅以随机颜色损失为指导的训练在早期很难收敛，这表明直接回归空区域的体素密度有助于优化过程的消歧。图7的右侧显示了来自挑战性序列的更直观的示例。利用密度损失只需要部分观测，就可以快速将优化集中在物体表面，减少伪影，获得更精确的物体重建。</p><h1 id="79a25bf3-e6e2-4e7b-b7a6-750591f93846" class="">CONCLUSIONS</h1><p id="10f1b4d7-55df-4ae7-8a12-48ebe977a09c" class="">我们提出了RO-MAP，一个实时多目标映射管道，只使用单目输入，不依赖于3D先验。该方法采用神经辐射场作为隐式形状表示，结合轻量级对象SLAM，对场景中的对象进行定位和重构，生成具有语义信息的密集对象地图。我们的高性能实现允许为每个对象创建单独的隐式模型，这些模型可以增量训练并快速收敛。综合实验证明了RO-MAP算法的有效性和优越性。在未来，我们感兴趣的是如何利用隐式对象映射进行下游任务，如机器人导航、抓取和重新定位。</p><h2 id="73ed325e-a1ed-4ac5-84ff-66dcf57aa009" class="">ACKNOWLEDGMENTS</h2><p id="6a2742d1-0fbc-4f27-a17b-656ae9688889" class="">国家自然科学基金(No. 61871074)资助。我们感谢Jad about - chakra对数据集的支持，以及Chen Quei-An的有益讨论。</p><p id="159e426a-917e-4e7d-a55a-7b0ca67188c2" class="">
+</p></div></article></body></html>
