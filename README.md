@@ -1,8 +1,8 @@
 # NeRF-Based-SLAM-Incredible-Insights
 ## Project Overview
-Welcome to the "NeRF-Based-SLAM-Incredible-Insights" repository. This project aims to provide comprehensive insights into various NeRF (Neural Radiance Fields) based Slam (Simultaneous Localization and Mapping) algorithms. If you're enthusiastic about NeRF-based Slam algorithms and wish to delve deep into their functionality and codebase, you're in the right place.
+Welcome to the **"NeRF-Based-SLAM-Incredible-Insights"** repository. This project aims to provide comprehensive insights into various NeRF (Neural Radiance Fields) based Slam (Simultaneous Localization and Mapping) algorithms. If you're enthusiastic about NeRF-based Slam algorithms and wish to delve deep into their functionality and codebase, you're in the right place.
 
-If you find this repository useful, please consider CITing and STARing this list. Feel free to share this project with others!
+If you find this repository useful, please consider **CITing and STARing** this list. Feel free to share this project with others!
 
 
 
@@ -12,9 +12,9 @@ If you find this repository useful, please consider CITing and STARing this list
 
 This repository encompasses:
 
-1. Detailed documentation on a variety of NeRF-based Slam algorithms, elucidating their fundamental principles and algorithmic workflows, such as [Paper Insights] and [Code Notes] and [Tracking Insights].
-2. Code annotations for select NeRF-based Slam algorithms to facilitate comprehension of their code implementation, such as [Co-SLAM_Scene_Representation_Noted] and [Co-SLAM_Tracking_Noted].
-3. More analysis videos are displayed in [wx.zsxq.com](https://wx.zsxq.com/dweb2/index/columns/228244221251).
+1. **Detailed documentation** on a variety of NeRF-based Slam algorithms, elucidating their fundamental principles and algorithmic workflows, such as [Paper Insights] and [Code Notes] and [Tracking Insights].
+2. **Code annotations** for select NeRF-based Slam algorithms to facilitate comprehension of their code implementation, such as [Co-SLAM_Scene_Representation_Noted] and [Co-SLAM_Tracking_Noted].
+3. More **analysis videos** links are displayed below.
 
 
 ## Visual SLAM Insights
