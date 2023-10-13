@@ -14,7 +14,7 @@ If you find this repository useful, please consider **CITING and STARING** this 
 This repository encompasses:
 
 1. **Detailed documentation** on a variety of NeRF-based Slam algorithms, elucidating their fundamental principles and algorithmic workflows, such as [Paper Insights] and [Code Notes] and [Tracking Insights].
-2. **Code annotations** for selected NeRF-based Slam algorithms to facilitate comprehension of their code implementation, such as [Co-SLAM_Scene_Representation_Noted] and [Co-SLAM_Tracking_Noted].
+2. **Code annotations** for selected NeRF-based Slam algorithms to facilitate comprehension of their code implementation, such as [Co-SLAM_Scene_Representation_Noted](./Co-SLAM_Scene_Representation_Noted/) and [Co-SLAM_Tracking_Noted](./Co-SLAM_Tracking_Noted/).
 3. More **analysis videos** links are displayed below.
 
 
