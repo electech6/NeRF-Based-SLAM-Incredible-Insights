@@ -2,7 +2,7 @@
 ## 项目简介
 欢迎来到 **“NeRF-Based-SLAM-Incredible-Insights”** 仓库。 该项目旨在提供对各种基于 NeRF（神经辐射场）的 Slam（同时定位和建图）算法的全面见解。 如果您对基于 NeRF 的 Slam 算法充满热情并希望深入研究其功能和代码库，那么您来对地方了。
 
-如果您发现此存储库有用，请考虑 **引用 和 加星** 此列表。 请随意与其他人分享这个项目！
+如果您发现此存储库有用，请考虑 **[引用](#引用) 和 加星** 此项目。 请随意与其他人分享这个项目！
 
 
 
@@ -12,9 +12,9 @@
 
 该仓库包含：
 
-1. **详细文档**介绍各种NeRF-Based Slam算法，阐明其基本原理和算法工作流程，见解和注解等内容详见[Paper Insights]和[Code Notes]和[Tracking Insights]模块。
+1. **详细文档**介绍各种NeRF-Based Slam算法，阐明其基本原理和算法工作流程，见解和注解等内容详见在[视觉SLAM见解](#视觉slam见解)和[激光SLAM见解](#激光slam见解)里的每个[Paper Insights]、[Code Notes]、[Tracking Insights]模块。
 2. 对于选中的NeRF-Based Slam算法，给出**代码注释**以方便理解其代码实现，详见[Co-SLAM_Scene_Representation_Noted](./Co-SLAM_Scene_Representation_Noted/) 和 [Co-SLAM_Tracking_Noted](./Co-SLAM_Tracking_Noted/)。
-3. 更多**视频解析**链接如下。
+3. 更多**视频解析**[链接如下](#video-link)。
 
 
 ## 视觉SLAM见解

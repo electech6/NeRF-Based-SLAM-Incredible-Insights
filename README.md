@@ -3,7 +3,7 @@ English Style/[Chinese Style](./README_CN.md)
 ## Project Overview
 Welcome to the **"NeRF-Based-SLAM-Incredible-Insights"** repository. This project aims to provide comprehensive insights into various NeRF (Neural Radiance Fields) based Slam (Simultaneous Localization and Mapping) algorithms. If you're enthusiastic about NeRF-based Slam algorithms and wish to delve deep into their functionality and codebase, you're in the right place.
 
-If you find this repository useful, please consider **CITING and STARING** this list. Feel free to share this project with others!
+If you find this repository useful, please consider **[CITING](#citation) and STARING** this project. Feel free to share this project with others!
 
 
 
@@ -13,9 +13,9 @@ If you find this repository useful, please consider **CITING and STARING** this 
 
 This repository encompasses:
 
-1. **Detailed documentation** on a variety of NeRF-based Slam algorithms, elucidating their fundamental principles and algorithmic workflows, such as [Paper Insights] and [Code Notes] and [Tracking Insights].
+1. **Detailed documentation** on a variety of NeRF-based Slam algorithms, elucidating their fundamental principles and algorithmic workflows, such as every [Paper Insights] and [Code Notes] and [Tracking Insights] in [Visual SLAM Insights](#visual-slam-insights) and [Lidar SLAM Insights](#lidar-slam-insights).
 2. **Code annotations** for selected NeRF-based Slam algorithms to facilitate comprehension of their code implementation, such as [Co-SLAM_Scene_Representation_Noted](./Co-SLAM_Scene_Representation_Noted/) and [Co-SLAM_Tracking_Noted](./Co-SLAM_Tracking_Noted/).
-3. More **analysis videos** links are displayed below.
+3. More **analysis videos** links are displayed below in [video link](#video-link).
 
 
 ## Visual SLAM Insights
