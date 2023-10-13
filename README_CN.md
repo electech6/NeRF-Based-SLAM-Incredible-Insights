@@ -1,24 +1,23 @@
 # NeRF-Based-SLAM-Incredible-Insights
-English Style/[Chinese Style](./README_CN.md)
-## Project Overview
-Welcome to the **"NeRF-Based-SLAM-Incredible-Insights"** repository. This project aims to provide comprehensive insights into various NeRF (Neural Radiance Fields) based Slam (Simultaneous Localization and Mapping) algorithms. If you're enthusiastic about NeRF-based Slam algorithms and wish to delve deep into their functionality and codebase, you're in the right place.
+## 项目简介
+欢迎来到 **“NeRF-Based-SLAM-Incredible-Insights”** 仓库。 该项目旨在提供对各种基于 NeRF（神经辐射场）的 Slam（同时定位和建图）算法的全面见解。 如果您对基于 NeRF 的 Slam 算法充满热情并希望深入研究其功能和代码库，那么您来对地方了。
 
-If you find this repository useful, please consider **CITING and STARING** this list. Feel free to share this project with others!
-
+如果您发现此存储库有用，请考虑 **引用 和 加星** 此列表。 请随意与其他人分享这个项目！
 
 
 
 
-## Contents
 
-This repository encompasses:
+## 目录
 
-1. **Detailed documentation** on a variety of NeRF-based Slam algorithms, elucidating their fundamental principles and algorithmic workflows, such as [Paper Insights] and [Code Notes] and [Tracking Insights].
-2. **Code annotations** for selected NeRF-based Slam algorithms to facilitate comprehension of their code implementation, such as [Co-SLAM_Scene_Representation_Noted] and [Co-SLAM_Tracking_Noted].
-3. More **analysis videos** links are displayed below.
+该仓库包含：
+
+1. **详细文档**介绍各种NeRF-Based Slam算法，阐明其基本原理和算法工作流程，见解和注解等内容详见[Paper Insights]和[Code Notes]和[Tracking Insights]模块。
+2. 对于选中的NeRF-Based Slam算法，给出**代码注释**以方便理解其代码实现，详见[Co-SLAM_Scene_Representation_Noted](./Co-SLAM_Scene_Representation_Noted/) 和 [Co-SLAM_Tracking_Noted](./Co-SLAM_Tracking_Noted/)。
+3. 更多**视频解析**链接如下。
 
 
-## Visual SLAM Insights
+## 视觉SLAM见解
 * **NeRF**: Representing Scenes as Neural Radiance Fields for View Synthesis, ECCV, 2020. [[Paper Insights](./1.Nerf开篇论文解读%20.pdf)]  [[Paper](https://arxiv.org/pdf/2003.08934.pdf)] [[Tensorflow Code](https://github.com/bmild/nerf)] [[Webpage](http://tancik.com/nerf)] [[Video](https://www.youtube.com/watch?v=JuH79E8rdKc)] 
 * **NICE-SLAM**: Neural Implicit Scalable Encoding for SLAM, CVPR, 2021. [[Code Notes](5.NICE-SLAM源码阅读笔记.pdf)] [[Tracking Insights](./6.NICE-SLAM跟踪代码解析和扩展内容.pdf)] [[Mapping Insights](./7.NICE-SLAM_Mapping.pdf)]  [[Paper](https://arxiv.org/abs/2112.12130)] [[Code](https://github.com/cvg/nice-slam)] [[Website](https://pengsongyou.github.io/nice-slam?utm_source=catalyzex.com)]
 * **iMap**: Implicit Mapping and Positioning in Real-Time, ICCV, 2021. [[Paper Insights](./2.iMap解读.pdf)] [[Paper](https://arxiv.org/abs/2103.12352)] [[Website](https://edgarsucar.github.io/iMAP/)] [[Video](https://www.youtube.com/watch?v=c-zkKGArl5Y)]
@@ -31,13 +30,13 @@ This repository encompasses:
 
 
 
-## Lidar SLAM Insights
+## 激光SLAM见解
 - Efficient Implicit Neural Reconstruction Using LiDAR, ICRA, 2023. [[Paper Insights](./19.Efficient%20Implicit%20Neural%20Reconstruction%20Using%20LiDAR论文框架梳理.pdf)]  [[Paper](https://arxiv.org/pdf/2302.14363.pdf)] [[Website](http://starydy.xyz/EINRUL/)] [[Pytorch Code](https://github.com/StarRealMan/EINRUL)] [[Video](https://www.youtube.com/watch?v=wUp2I-X-IdI)]
 - **NeRF-LOAM**: Neural Implicit Representation for Large-Scale Incremental LiDAR Odometry and Mapping, ICCV, 2023. [[Paper Insights](./12.基于Lidar的NeRF-LOAM论文解读.pdf)]    [[Paper](https://arxiv.org/pdf/2303.10709.pdf)] [[Code](https://github.com/JunyuanDeng/NeRF-LOAM)]
 
 
 
-## Video Link
+## 视频链接
 
 * [[第01讲 田宇博-NeRF开篇论文解读 NeRF](https://t.zsxq.com/13Rdok77J)]
 * [[第02讲 田宇博-第一个稠密的实时NeRF SLAM iMAP论文解读](https://t.zsxq.com/13NT9SrVd)]
@@ -63,23 +62,21 @@ This repository encompasses:
 * [[第19讲-基于LiDAR的Efficient Implicit Neural Reconstruction Using LiDAR 论文解读](https://t.zsxq.com/13Ofplkrr)]
 * [[第20讲-LiDAR全局定位 IRMCL Implicit Representation-based Online Global Localization论文解读](https://t.zsxq.com/13kYwivPD)]
 
-zsxq members have video viewing rights
-
+知识星球成员可免费观看视频
 
 ![zsxq](images/Life_Planet.JPG)
 
 
-## Acknowledgments
 
-This project comes from the "Nerf Based SLAM Algorithm Learning Group" of [CVLIFE](https://cvlife.net). The contributing members include (in no particular order):
-
-
-Tian Yubo, Liu Quanxiang, Shi Hui, Wang Shouan, Wan Jingyi, Zhong Zhide, Xu Yang, Zhang Yi, Chen Andong, Xia Ningning
+## 致谢
+本项目来自于[计算机视觉life](https:cvlife.net)的“Nerf Based SLAM算法学习小组”，贡献成员包括（不区分先后顺序）：
 
 
+田宇博、刘权祥、史慧、汪寿安、万静怡、钟志德、徐扬、张一、陈安东、夏宁宁
 
 
-## Citation
+
+## 引用
 ```
 @misc{electron2023nerfbasedslamincredibleinsights,
     title = {NeRF-Based-SLAM-Incredible-Insights},
@@ -91,6 +88,6 @@ Tian Yubo, Liu Quanxiang, Shi Hui, Wang Shouan, Wan Jingyi, Zhong Zhide, Xu Yang
 ```
 
 
-## Star History
+## Star历史
 
 [![Star History Chart](https://api.star-history.com/svg?repos=electech6/NeRF-Based-SLAM-Incredible-Insights&type=Date)](https://star-history.com/#electech6/NeRF-Based-SLAM-Incredible-Insights&Date)
